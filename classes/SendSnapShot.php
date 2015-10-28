@@ -22,28 +22,29 @@
         public function upload ($filename, $file) {
             $result = $this->_aws->putObject(array(
                 'Bucket' => 'snapshots.calacademy.org',
-                'Key'    => $filename,
-                'SourceFile'   => $file
+                'Key' => $filename,
+                'SourceFile' => $file
             ));
 
             return $result['ObjectURL'];
         }
 
         public function send ($recipient, $pic = null, $msg = 'You look amazing.') {
-            if ($pic === null) {
-                $sms = $this->_client->account->messages->sendMessage(
-                    TWILIO_NUMBER, 
-                    $recipient,
-                    $msg
-                );
-            } else {
-                $sms = $this->_client->account->messages->sendMessage(
-                    TWILIO_NUMBER, 
-                    $recipient,
-                    $msg,
-                    array($pic)
-                );
+            $files = null;
+
+            if ($pic !== null) {
+                $files = array($pic);    
             }
+
+            $sms = $this->_client->account->messages->sendMessage(
+                TWILIO_NUMBER, 
+                $recipient,
+                $msg,
+                $files,
+                array(
+                    'StatusCallback' => TWILIO_CALLBACK
+                )
+            );
         }
     }
 
