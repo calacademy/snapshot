@@ -1,0 +1,17 @@
+@import "global-variables";
+@import "compass/css3/opacity";
+@import "compass/css3/user-interface";
+
+body {
+	background-color: $international-orange;
+	color: #ffffff;
+	font-family: 'Whitney A', 'Whitney B', Helvetica, Arial, sans-serif;
+	font-size: 2em;
+	margin: 0;
+	padding: 0;
+
+	video {
+		width: 100%;
+		height: 100%;
+	}
+}

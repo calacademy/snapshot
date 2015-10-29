@@ -1,0 +1,37 @@
+@import "compass/css3";
+@import "compass/utilities";
+@import "compass/css3/user-interface";
+
+@mixin calacademy-transform-origin($x, $y, $z:null) {
+	$myVal: $x $y $z;
+
+	@if $z == null {
+		$myVal: $x $y;
+	}
+
+	// vendor prefixed
+	@each $prefix in browser-prefixes($supported-browsers) {
+		#{$prefix + '-transform-origin'}: $myVal;
+	}
+
+	// no vendor prefix
+	transform-origin: $myVal;
+
+	.lt-ie9 & {
+		-ms-transform-origin: $x $y;
+		transform-origin: $x $y;
+	}
+}
+
+@mixin calc($prop, $val, $valFallback) {
+	// fallback
+	#{$prop}: $valFallback;
+
+	// vendor prefixed
+	@each $prefix in browser-prefixes($supported-browsers) {
+		#{$prop}: $prefix + '-' + calc(#{$val});
+	}
+
+	// no vendor prefix
+	#{$prop}: calc(#{$val});
+}
