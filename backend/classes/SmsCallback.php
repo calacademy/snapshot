@@ -68,6 +68,38 @@ class SmsCallback {
 		}
 	}
 
+	public function received ($data) {
+		if (!$this->isFromTwilio()) {
+			$this->_error();
+			return false;
+		}
+
+		$data = StringUtil::getCleanArray($data);
+
+		$query = "INSERT INTO sms_received
+			(
+				smssid,
+				num_to,
+				num_from,
+				body,
+				status
+			)
+			VALUES
+			(
+				'{$data['SmsSid']}',
+				'{$data['To']}',
+				'{$data['From']}',
+				'{$data['Body']}',
+				'{$data['SmsStatus']}'
+			)";
+
+		if ($this->_getDBResource($query)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function callback ($data) {
 		if (!$this->isFromTwilio()) {
 			$this->_error();
@@ -76,7 +108,7 @@ class SmsCallback {
 
 		$data = StringUtil::getCleanArray($data);
 
-		$query = "INSERT INTO sms
+		$query = "INSERT INTO sms_sent
 			(
 				smssid,
 				num_to,
@@ -100,7 +132,7 @@ class SmsCallback {
 
 	public function getStatusesForId ($id) {
 		$id = mysql_real_escape_string($id);
-		$query = "SELECT status, callback FROM sms WHERE smssid = '{$id}' LIMIT 25";
+		$query = "SELECT status, callback FROM sms_sent WHERE smssid = '{$id}' LIMIT 25";
 
 		$arr = array();
 
