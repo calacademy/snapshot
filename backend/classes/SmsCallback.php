@@ -24,6 +24,7 @@ class SmsCallback {
 	}
 
 	private function _json ($data) {
+		header('Access-Control-Allow-Origin: *');
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 		header('Content-type: application/json');
@@ -133,6 +134,20 @@ class SmsCallback {
 	public function getStatusesForId ($id) {
 		$id = mysql_real_escape_string($id);
 		$query = "SELECT status, callback FROM sms_sent WHERE smssid = '{$id}' LIMIT 25";
+
+		$arr = array();
+
+		$result = $this->_getDBResource($query);
+
+		while ($row = mysql_fetch_assoc($result)) {
+			$arr[] = $row;
+		}
+
+		$this->_json($arr);
+	}
+
+	public function getShutterRequests () {
+		$query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > DATE_SUB(NOW(), INTERVAL 1 MINUTE) LIMIT 25";
 
 		$arr = array();
 

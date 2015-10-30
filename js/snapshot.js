@@ -1,15 +1,26 @@
 var Snapshot = function () {
 	var _cam;
-
+	
 	var _onCamError = function (e) {
 		console.log(e);
 	}
 
 	var _onCamStart = function () {
 		// init interaction
-		$('body').on('click', function () {
-			console.log('taking a snapshot...');
-			_cam.takeSnapshot();
+		// $('body').on('click', function () {
+		// 	console.log('taking a snapshot...');
+		// 	_cam.takeSnapshot();
+		// });
+		_pollShutter();
+	}
+
+	var _pollShutter = function () {
+		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', null, function (data, textStatus, jqXHR) {
+			if (data.length > 0) {
+				alert(data[0].num_from + "\n" + data[0].body);
+			} else {
+				_pollShutter();	
+			}
 		});
 	}
 
