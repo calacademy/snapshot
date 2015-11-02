@@ -2,20 +2,35 @@
 @import "compass/css3/opacity";
 @import "compass/css3/user-interface";
 
+html,
 body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	background-image: url('../images/logo.svg');
+	background-position: bottom 100px right 100px;
+	background-repeat: no-repeat;
 	background-color: $international-orange;
+	@include background-size(350px 350px);
+
 	color: #ffffff;
 	font-family: 'Whitney A', 'Whitney B', Helvetica, Arial, sans-serif;
 	font-size: 2em;
-	margin: 0;
-	padding: 0;
 
 	// transitions
 	#counter,
 	#message,
 	#stream-container {
-		margin: 0;
-		padding: 0;
+		&, h1 {
+			margin: 0;
+			padding: 0;	
+		}
+		
 		@include opacity(0);
 
 		@include transition(
@@ -39,6 +54,25 @@ body {
 	}
 
 	// style
+	#snap-container {
+		z-index: 3;
+		position: absolute;
+
+		&, img {
+			width: 100%;
+		}
+
+		@include calacademy-transform-origin(100%, 100%);
+
+		.drop & {
+			@include transition(
+				transform 1.5s $easing
+			);
+
+			@include transform(rotate(50deg) translateY(100%) translateX(-10%) scale(0.10));
+		}
+	}
+
 	#stream-container {
 		position: absolute;
 		z-index: 1;
@@ -53,11 +87,11 @@ body {
 
 	#counter,
 	#message {
-		h1 {
+		top: 40%;
+  		@include transform(translateY(-50%));
+
+		h1, h2 {
 			display: inline-block;
-			background-color: $international-orange;
-			padding-left: .25em;
-			padding-right: .25em;
 			font-weight: $book;
 
 			strong {
@@ -66,15 +100,43 @@ body {
 		}
 
 		width: 100%;
-		position: relative;
-		z-index: 2;
 		font-size: 3em;
+		position: relative;
 		text-align: center;
 	}
 
-	#counter {
+	#message {
+		z-index: 2;
+
 		h1 {
+			// background-image: url('../images/camera.png');
+			// background-repeat: no-repeat;
+			// background-position: center top;
+			// @include background-size(300px 300px);
+			// padding-top: 275px;
+		}
+	}
+
+	#counter {
+		position: absolute;
+		left: 0;
+		z-index: 4;
+
+		h1, h2 {
+			font-size: 2.5em;
 			font-weight: $semibold;
+		}
+
+		h1 {
+			padding: 0;
+			padding-top: 25px;
+			@include box-sizing(border-box);
+			overflow: hidden;
+			text-align: center;
+			width: 350px;
+			height: 350px;
+			@include border-radius(50%);
+			background-color: $international-orange;
 		}
 	}
 }

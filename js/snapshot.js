@@ -3,8 +3,8 @@ var Snapshot = function () {
 	var _isShooting = false;
 	var _intervalCountdown;
 	var _num;
-	var _count = 0;
-	var _secs = 5;
+	var _count;
+	var _secs = 6;
 	var _currentTime;
 	
 	var _onCamError = function (e) {
@@ -16,15 +16,20 @@ var Snapshot = function () {
 	}
 
 	var _startPolling = function () {
+		$('#snap-container').empty();
+		$('html').removeClass('drop');
+
 		$('#message').html('<h1>Send a text to<br /><strong>(415) 214-9513</strong></h1>');
 		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
 
 	var _onCount = function () {
-		_count++;
+		_count--;
 
-		if (_count > _secs) {
+		if (_count == 0) {
+			$('#counter').html('<h2>Smile!</h2>');
+		} else if (_count == -1) {
 			clearInterval(_intervalCountdown);
 			_shoot();
 		} else {
@@ -39,7 +44,7 @@ var Snapshot = function () {
 
 	var _startCountdown = function () {
 		$('html').addClass('count-down');
-		_count = 0;
+		_count = _secs;
 
 		if (_intervalCountdown) {
 			clearInterval(_intervalCountdown);
@@ -66,16 +71,23 @@ var Snapshot = function () {
 
 	var _onSnapshotSent = function (data, status, xhr) {
 		$('html').removeClass('count-down');
-		$('video').get(0).play();
 		$('#message').html('<h1>Check your phone</h1>');
-		_startPolling();
+		$('html').addClass('drop');
+		$('video').get(0).play();
+		
+		setTimeout(_startPolling, 5000);
 	}
 
 	var _onCamSnapshot = function (snapshot) {
+		// create still
+		var snap = snapshot.toDataURL('image/png');
+		var img = $('<img src="' + snap + '" />');
+		$('#snap-container').html(img);
+
 		// send image to server for processing and transmission
 		var formData = new FormData();
 		formData.append('filename', 'test.png');
-		formData.append('snapshot', _dataURItoBlob(snapshot.toDataURL('image/png')));
+		formData.append('snapshot', _dataURItoBlob(snap));
 
 		$.ajax({
 			url: 'ajax/',
