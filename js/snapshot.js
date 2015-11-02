@@ -1,27 +1,71 @@
 var Snapshot = function () {
 	var _cam;
+	var _isShooting = false;
+	var _intervalCountdown;
+	var _num;
+	var _count = 0;
+	var _secs = 5;
+	var _currentTime;
 	
 	var _onCamError = function (e) {
 		console.log(e);
 	}
 
 	var _onCamStart = function () {
-		// init interaction
-		// $('body').on('click', function () {
-		// 	console.log('taking a snapshot...');
-		// 	_cam.takeSnapshot();
-		// });
+		_startPolling();
+	}
+
+	var _startPolling = function () {
+		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
 
+	var _onCount = function () {
+		_count++;
+
+		if (_count > _secs) {
+			clearInterval(_intervalCountdown);
+			_shoot();
+		} else {
+			$('#counter').html(_count);
+		}
+	}
+
+	var _shoot = function () {
+		$('video').get(0).pause();
+		_cam.takeSnapshot();
+	}
+
+	var _startCountdown = function () {
+		_count = 0;
+
+		if (_intervalCountdown) {
+			clearInterval(_intervalCountdown);
+		}
+
+		_intervalCountdown = setInterval(_onCount, 1000);
+		_onCount();
+	}
+
 	var _pollShutter = function () {
-		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', null, function (data, textStatus, jqXHR) {
+		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
+			now: _currentTime
+		}, function (data, textStatus, jqXHR) {
 			if (data.length > 0) {
-				alert(data[0].num_from + "\n" + data[0].body);
+				// alert(data[0].num_from + "\n" + data[0].body);
+				_isShooting = true;
+				_num = data[0].num_from;
+				_startCountdown();
 			} else {
 				_pollShutter();	
 			}
 		});
+	}
+
+	var _onSnapshotSent = function (data, status, xhr) {
+		$('video').get(0).play();
+		$('#message').html('Check your phone');
+		_startPolling();
 	}
 
 	var _onCamSnapshot = function (snapshot) {
@@ -36,9 +80,7 @@ var Snapshot = function () {
 			contentType: false,
 			processData: false,
 			data: formData,
-			success: function (data, status, xhr) {
-				console.log(data)
-			}
+			success: _onSnapshotSent
 		});
 	}
 
@@ -58,7 +100,7 @@ var Snapshot = function () {
 	}
 
 	this.__construct = function () {
-		_cam = new SayCheese('body', {
+		_cam = new SayCheese('#stream-container', {
 			camResolution: {
 				width: 1280,
 				height: 720

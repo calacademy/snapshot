@@ -3,6 +3,6 @@
 	require_once('../classes/SmsCallback.php');
 
 	$foo = new SmsCallback();
-	$foo->getShutterRequests();
+	$foo->getShutterRequests($_REQUEST['now']);
 
 ?>

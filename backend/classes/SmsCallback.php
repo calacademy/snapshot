@@ -146,8 +146,11 @@ class SmsCallback {
 		$this->_json($arr);
 	}
 
-	public function getShutterRequests () {
-		$query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > DATE_SUB(NOW(), INTERVAL 1 MINUTE) LIMIT 25";
+	public function getShutterRequests ($timeString) {
+		// $query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > DATE_SUB(NOW(), INTERVAL 1 MINUTE) LIMIT 25";
+
+		$time = date('Y-m-d H:i:s', intval($timeString));
+		$query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > '{$time}' ORDER BY callback ASC LIMIT 1";
 
 		$arr = array();
 
