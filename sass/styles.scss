@@ -10,8 +10,71 @@ body {
 	margin: 0;
 	padding: 0;
 
-	video {
+	// transitions
+	#counter,
+	#message,
+	#stream-container {
+		margin: 0;
+		padding: 0;
+		@include opacity(0);
+
+		@include transition(
+			opacity .6s $easing
+		);
+	}
+
+	#message {
+		@include opacity(1);
+	}
+
+	.count-down & {
+		#counter,
+		#stream-container {
+			@include opacity(1);	
+		}
+
+		#message {
+			@include opacity(0);
+		}
+	}
+
+	// style
+	#stream-container {
+		position: absolute;
+		z-index: 1;
+		top: 0;
+		left: 0;
+
+		&, video {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	#counter,
+	#message {
+		h1 {
+			display: inline-block;
+			background-color: $international-orange;
+			padding-left: .25em;
+			padding-right: .25em;
+			font-weight: $book;
+
+			strong {
+				font-weight: $semibold;
+			}
+		}
+
 		width: 100%;
-		height: 100%;
+		position: relative;
+		z-index: 2;
+		font-size: 3em;
+		text-align: center;
+	}
+
+	#counter {
+		h1 {
+			font-weight: $semibold;
+		}
 	}
 }

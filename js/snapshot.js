@@ -16,6 +16,7 @@ var Snapshot = function () {
 	}
 
 	var _startPolling = function () {
+		$('#message').html('<h1>Send a text to<br /><strong>(415) 214-9513</strong></h1>');
 		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
@@ -27,7 +28,7 @@ var Snapshot = function () {
 			clearInterval(_intervalCountdown);
 			_shoot();
 		} else {
-			$('#counter').html(_count);
+			$('#counter').html('<h1>' + _count + '</h1>');
 		}
 	}
 
@@ -37,6 +38,7 @@ var Snapshot = function () {
 	}
 
 	var _startCountdown = function () {
+		$('html').addClass('count-down');
 		_count = 0;
 
 		if (_intervalCountdown) {
@@ -63,8 +65,9 @@ var Snapshot = function () {
 	}
 
 	var _onSnapshotSent = function (data, status, xhr) {
+		$('html').removeClass('count-down');
 		$('video').get(0).play();
-		$('#message').html('Check your phone');
+		$('#message').html('<h1>Check your phone</h1>');
 		_startPolling();
 	}
 
