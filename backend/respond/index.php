@@ -10,5 +10,5 @@
 
 ?>
 <Response>
-    <Message>Got it!</Message>
+    <!-- <Message>Got it!</Message> -->
 </Response>

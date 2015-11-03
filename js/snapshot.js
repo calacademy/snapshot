@@ -44,6 +44,8 @@ var Snapshot = function () {
 
 	var _startCountdown = function () {
 		$('html').addClass('count-down');
+		$('#message').html('<h1>Check your phone</h1>');
+		
 		_count = _secs;
 
 		if (_intervalCountdown) {
@@ -71,7 +73,7 @@ var Snapshot = function () {
 
 	var _onSnapshotSent = function (data, status, xhr) {
 		$('html').removeClass('count-down');
-		$('#message').html('<h1>Check your phone</h1>');
+		$('html').removeClass('flash');
 		$('html').addClass('drop');
 		$('video').get(0).play();
 		
@@ -83,9 +85,11 @@ var Snapshot = function () {
 		var snap = snapshot.toDataURL('image/png');
 		var img = $('<img src="' + snap + '" />');
 		$('#snap-container').html(img);
+		$('html').addClass('flash');
 
 		// send image to server for processing and transmission
 		var formData = new FormData();
+		formData.append('num', _num);
 		formData.append('filename', 'test.png');
 		formData.append('snapshot', _dataURItoBlob(snap));
 

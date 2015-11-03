@@ -35,3 +35,22 @@
 	// no vendor prefix
 	#{$prop}: calc(#{$val});
 }
+
+// animations
+@include keyframes(fade-in) {
+	from {
+		@include opacity(0);
+	}
+	to {
+		@include opacity(1);
+	}
+}
+
+@include keyframes(fade-out) {
+	from {
+		@include opacity(1);
+	}
+	to {
+		@include opacity(0);
+	}
+}

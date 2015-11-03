@@ -1,3 +1,69 @@
+@-moz-keyframes fade-in {
+  /* line 41, ../sass/_mixins.scss */
+  from {
+    opacity: 0;
+  }
+
+  /* line 44, ../sass/_mixins.scss */
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  /* line 41, ../sass/_mixins.scss */
+  from {
+    opacity: 0;
+  }
+
+  /* line 44, ../sass/_mixins.scss */
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  /* line 41, ../sass/_mixins.scss */
+  from {
+    opacity: 0;
+  }
+
+  /* line 44, ../sass/_mixins.scss */
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fade-out {
+  /* line 50, ../sass/_mixins.scss */
+  from {
+    opacity: 1;
+  }
+
+  /* line 53, ../sass/_mixins.scss */
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fade-out {
+  /* line 50, ../sass/_mixins.scss */
+  from {
+    opacity: 1;
+  }
+
+  /* line 53, ../sass/_mixins.scss */
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  /* line 50, ../sass/_mixins.scss */
+  from {
+    opacity: 1;
+  }
+
+  /* line 53, ../sass/_mixins.scss */
+  to {
+    opacity: 0;
+  }
+}
 /* line 5, ../sass/styles.scss */
 html,
 body {
@@ -33,7 +99,37 @@ body #stream-container {
   -webkit-transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
   transition: opacity 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
-/* line 29, ../sass/styles.scss */
+/* line 37, ../sass/styles.scss */
+body #message, body #message h1 {
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+/* line 41, ../sass/styles.scss */
+body #message h1 {
+  -moz-animation: fade-in 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  -webkit-animation: fade-in 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: fade-in 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+/* line 47, ../sass/styles.scss */
+.count-down body #counter,
+.count-down body #stream-container {
+  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
+  opacity: 1;
+}
+/* line 52, ../sass/styles.scss */
+.count-down body #message {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+/* line 59, ../sass/styles.scss */
+.flash body #stream-container, .drop body #stream-container {
+  display: none;
+}
+/* line 65, ../sass/styles.scss */
+.drop body #counter {
+  display: none;
+}
+/* line 74, ../sass/styles.scss */
 body #counter, body #counter h1,
 body #message,
 body #message h1,
@@ -42,23 +138,7 @@ body #stream-container h1 {
   margin: 0;
   padding: 0;
 }
-/* line 41, ../sass/styles.scss */
-body #message {
-  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-  opacity: 1;
-}
-/* line 46, ../sass/styles.scss */
-.count-down body #counter,
-.count-down body #stream-container {
-  filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
-  opacity: 1;
-}
-/* line 51, ../sass/styles.scss */
-.count-down body #message {
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
-}
-/* line 57, ../sass/styles.scss */
+/* line 80, ../sass/styles.scss */
 body #snap-container {
   z-index: 3;
   position: absolute;
@@ -68,16 +148,36 @@ body #snap-container {
   -webkit-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 61, ../sass/styles.scss */
+/* line 84, ../sass/styles.scss */
 body #snap-container, body #snap-container img {
   width: 100%;
+}
+/* line 89, ../sass/styles.scss */
+body #snap-container:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #ffffff;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+}
+/* line 101, ../sass/styles.scss */
+.flash body #snap-container:before {
+  -moz-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  -webkit-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+  animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
 /* line 20, ../sass/_mixins.scss */
 .lt-ie9 body #snap-container {
   -ms-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 67, ../sass/styles.scss */
+/* line 109, ../sass/styles.scss */
 .drop body #snap-container {
   -moz-transition: -moz-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
   -o-transition: -o-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -88,19 +188,19 @@ body #snap-container, body #snap-container img {
   -webkit-transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
   transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
 }
-/* line 76, ../sass/styles.scss */
+/* line 118, ../sass/styles.scss */
 body #stream-container {
   position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
 }
-/* line 82, ../sass/styles.scss */
+/* line 124, ../sass/styles.scss */
 body #stream-container, body #stream-container video {
   width: 100%;
   height: 100%;
 }
-/* line 88, ../sass/styles.scss */
+/* line 130, ../sass/styles.scss */
 body #counter,
 body #message {
   top: 40%;
@@ -113,35 +213,35 @@ body #message {
   position: relative;
   text-align: center;
 }
-/* line 93, ../sass/styles.scss */
+/* line 135, ../sass/styles.scss */
 body #counter h1, body #counter h2,
 body #message h1,
 body #message h2 {
   display: inline-block;
   font-weight: 400;
 }
-/* line 97, ../sass/styles.scss */
+/* line 139, ../sass/styles.scss */
 body #counter h1 strong, body #counter h2 strong,
 body #message h1 strong,
 body #message h2 strong {
   font-weight: 600;
 }
-/* line 108, ../sass/styles.scss */
+/* line 150, ../sass/styles.scss */
 body #message {
   z-index: 2;
 }
-/* line 120, ../sass/styles.scss */
+/* line 162, ../sass/styles.scss */
 body #counter {
   position: absolute;
   left: 0;
   z-index: 4;
 }
-/* line 125, ../sass/styles.scss */
+/* line 167, ../sass/styles.scss */
 body #counter h1, body #counter h2 {
   font-size: 2.5em;
   font-weight: 600;
 }
-/* line 130, ../sass/styles.scss */
+/* line 172, ../sass/styles.scss */
 body #counter h1 {
   padding: 0;
   padding-top: 25px;
