@@ -33,6 +33,10 @@ var Snapshot = function () {
 			clearInterval(_intervalCountdown);
 			_shoot();
 		} else {
+			if (_count == 1) {
+				$('#message').html('<h1><strong>Check your phone!</strong></h1><h2>~30 secs selfie roundtrip</h2>');
+			}
+			
 			$('#counter').html('<h1>' + _count + '</h1>');
 		}
 	}
@@ -44,7 +48,6 @@ var Snapshot = function () {
 
 	var _startCountdown = function () {
 		$('html').addClass('count-down');
-		$('#message').html('<h1>Check your phone</h1>');
 		
 		_count = _secs;
 

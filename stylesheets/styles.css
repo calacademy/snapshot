@@ -130,11 +130,13 @@ body #message h1 {
   display: none;
 }
 /* line 74, ../sass/styles.scss */
-body #counter, body #counter h1,
+body #counter, body #counter h1, body #counter h2,
 body #message,
 body #message h1,
+body #message h2,
 body #stream-container,
-body #stream-container h1 {
+body #stream-container h1,
+body #stream-container h2 {
   margin: 0;
   padding: 0;
 }
@@ -230,18 +232,22 @@ body #message h2 strong {
 body #message {
   z-index: 2;
 }
-/* line 162, ../sass/styles.scss */
+/* line 161, ../sass/styles.scss */
+body #message h2 {
+  font-size: 1.1em;
+}
+/* line 166, ../sass/styles.scss */
 body #counter {
   position: absolute;
   left: 0;
   z-index: 4;
 }
-/* line 167, ../sass/styles.scss */
+/* line 171, ../sass/styles.scss */
 body #counter h1, body #counter h2 {
   font-size: 2.5em;
   font-weight: 600;
 }
-/* line 172, ../sass/styles.scss */
+/* line 176, ../sass/styles.scss */
 body #counter h1 {
   padding: 0;
   padding-top: 25px;

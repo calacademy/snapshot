@@ -71,7 +71,7 @@ body {
 	#counter,
 	#message,
 	#stream-container {
-		&, h1 {
+		&, h1, h2 {
 			margin: 0;
 			padding: 0;	
 		}
@@ -156,6 +156,10 @@ body {
 			// background-position: center top;
 			// @include background-size(300px 300px);
 			// padding-top: 275px;
+		}
+
+		h2 {
+			font-size: 1.1em;
 		}
 	}
 
