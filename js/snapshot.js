@@ -61,10 +61,10 @@ var Snapshot = function () {
 
 	var _pollShutter = function () {
 		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
+			nocache: Math.random(),
 			now: _currentTime
 		}, function (data, textStatus, jqXHR) {
 			if (data.length > 0) {
-				// alert(data[0].num_from + "\n" + data[0].body);
 				_isShooting = true;
 				_num = data[0].num_from;
 				_startCountdown();

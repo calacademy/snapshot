@@ -19,7 +19,21 @@
             ));    
         }
 
+        public function addOverlay ($file) {
+            $overlay = imagecreatefrompng(dirname(__FILE__) . '/../images/overlay.png');
+            $original = imagecreatefrompng($file);
+
+            if ($overlay && $original) {
+                imagecopy($original, $overlay, 0, 0, 0, 0, imagesx($overlay), imagesy($overlay)); 
+                imagepng($original, $file);  
+            } else {
+                error_log('addOverlay failed');
+            }
+        }
+
         public function upload ($filename, $file) {
+            $this->addOverlay($file);
+
             $result = $this->_aws->putObject(array(
                 'Bucket' => 'snapshots.calacademy.org',
                 'Key' => $filename,
