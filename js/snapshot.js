@@ -1,10 +1,11 @@
 var Snapshot = function () {
 	var _cam;
-	var _isShooting = false;
 	var _intervalCountdown;
 	var _num;
 	var _count;
 	var _secs = 6;
+
+	var _uid_sms;
 	var _currentTime;
 	
 	var _onCamError = function (e) {
@@ -60,16 +61,34 @@ var Snapshot = function () {
 	}
 
 	var _pollShutter = function () {
+		console.log(_currentTime);
+		
 		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
 			nocache: Math.random(),
 			now: _currentTime
 		}, function (data, textStatus, jqXHR) {
-			if (data.length > 0) {
-				_isShooting = true;
+			// nothing
+			if (data.length == 0) {
+				_pollShutter();
+				return;
+			}
+
+			var uid_sms = parseInt(data[0].uid_sms)
+
+			// setup
+			if (!_uid_sms) {
+				_uid_sms = uid_sms;
+				_pollShutter();
+				return;
+			}
+
+			// check if there's a newer request
+			if (uid_sms > _uid_sms) {
+				_uid_sms = uid_sms;
 				_num = data[0].num_from;
-				_startCountdown();
+				_startCountdown();	
 			} else {
-				_pollShutter();	
+				_pollShutter();
 			}
 		});
 	}
