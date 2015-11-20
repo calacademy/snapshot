@@ -1,5 +1,5 @@
 <?php
-    
+
     require 'Config.php';
     require 'Services/Twilio.php';
     require 'aws/aws-autoloader.php';
@@ -16,16 +16,16 @@
                 'profile' => 'default',
                 'version' => '2006-03-01',
                 'region' => 'us-west-1'
-            ));    
+            ));
         }
 
         public function addOverlay ($file) {
-            $overlay = imagecreatefrompng(dirname(__FILE__) . '/../images/overlay.png');
+            $overlay = imagecreatefrompng(dirname(__FILE__) . '/../images/logo.png');
             $original = imagecreatefrompng($file);
 
             if ($overlay && $original) {
-                imagecopy($original, $overlay, 0, 0, 0, 0, imagesx($overlay), imagesy($overlay)); 
-                imagepng($original, $file);  
+                imagecopy($original, $overlay, (imagesx($original) - imagesx($overlay)), (imagesy($original) - imagesy($overlay)), 0, 0, imagesx($overlay), imagesy($overlay));
+                imagepng($original, $file);
             } else {
                 error_log('addOverlay failed');
             }
@@ -47,11 +47,11 @@
             $files = null;
 
             if ($pic !== null) {
-                $files = array($pic);    
+                $files = array($pic);
             }
 
             $sms = $this->_client->account->messages->sendMessage(
-                TWILIO_NUMBER, 
+                TWILIO_NUMBER,
                 $recipient,
                 $msg,
                 $files,
