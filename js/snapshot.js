@@ -4,15 +4,50 @@ var Snapshot = function () {
 	var _num;
 	var _count;
 	var _secs = 6;
-
 	var _uid_sms;
 	var _currentTime;
-	
+
+	var _camDimensions = {
+		width: 1280,
+		height: 720
+	};
+
+	var _onResize = function () {
+		_fill($('#snap-container img'));
+		_fill($('#stream-container video'));
+	}
+
+	var _fill = function (el) {
+		if (el.length == 0) return;
+
+		var ratio = _camDimensions.width / _camDimensions.height;
+		var containerRatio = $(window).width() / $(window).height();
+
+		var css = {
+          position: 'relative',
+          left: 0,
+          top: 0
+        };
+
+		if (ratio > containerRatio) {
+			css.width = Math.ceil($(window).height() * ratio);
+			css.height = $(window).height();
+			css.left = Math.round(($(window).width() - css.width) / 2) + 'px';
+		} else {
+			css.width = $(window).width();
+			css.height = Math.ceil($(window).width() / ratio);
+			css.top = Math.round(($(window).height() - css.height) / 2) + 'px';
+		}
+
+		el.css(css);
+	}
+
 	var _onCamError = function (e) {
 		console.log(e);
 	}
 
 	var _onCamStart = function () {
+		_onResize();
 		_startPolling();
 	}
 
@@ -37,7 +72,7 @@ var Snapshot = function () {
 			if (_count == 1) {
 				$('#message').html('<h1><strong>Check your phone!</strong></h1><h2>~30 secs selfie roundtrip</h2>');
 			}
-			
+
 			$('#counter').html('<h1>' + _count + '</h1>');
 		}
 	}
@@ -49,7 +84,7 @@ var Snapshot = function () {
 
 	var _startCountdown = function () {
 		$('html').addClass('count-down');
-		
+
 		_count = _secs;
 
 		if (_intervalCountdown) {
@@ -62,7 +97,7 @@ var Snapshot = function () {
 
 	var _pollShutter = function () {
 		console.log(_currentTime);
-		
+
 		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
 			nocache: Math.random(),
 			now: _currentTime
@@ -86,7 +121,7 @@ var Snapshot = function () {
 			if (uid_sms > _uid_sms) {
 				_uid_sms = uid_sms;
 				_num = data[0].num_from;
-				_startCountdown();	
+				_startCountdown();
 			} else {
 				_pollShutter();
 			}
@@ -98,7 +133,7 @@ var Snapshot = function () {
 		$('html').removeClass('flash');
 		$('html').addClass('drop');
 		$('video').get(0).play();
-		
+
 		setTimeout(_startPolling, 5000);
 	}
 
@@ -108,6 +143,8 @@ var Snapshot = function () {
 		var img = $('<img src="' + snap + '" />');
 		$('#snap-container').html(img);
 		$('html').addClass('flash');
+
+		_onResize();
 
 		// send image to server for processing and transmission
 		var formData = new FormData();
@@ -141,11 +178,10 @@ var Snapshot = function () {
 	}
 
 	this.__construct = function () {
+		$(window).on('resize', _onResize);
+
 		_cam = new SayCheese('#stream-container', {
-			camResolution: {
-				width: 1280,
-				height: 720
-			}
+			camResolution: _camDimensions
 		});
 
 		_cam.on('error', _onCamError);
@@ -154,5 +190,5 @@ var Snapshot = function () {
 		_cam.start();
 	}
 
-	this.__construct();	
+	this.__construct();
 }

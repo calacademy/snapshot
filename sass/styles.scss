@@ -13,10 +13,10 @@ body {
 
 body {
 	background-image: url('../images/logo.svg');
-	background-position: bottom 100px right 100px;
+	background-position: bottom 4.5vw right 4.5vw;
 	background-repeat: no-repeat;
 	background-color: $international-orange;
-	@include background-size(350px 350px);
+	@include background-size(15vw 15vw);
 
 	color: #ffffff;
 	font-family: 'Whitney A', 'Whitney B', Helvetica, Arial, sans-serif;
@@ -75,6 +75,10 @@ body {
 			margin: 0;
 			padding: 0;	
 		}
+	}
+
+	.fill {
+		overflow: hidden;
 	}
 
 	#snap-container {
@@ -141,8 +145,12 @@ body {
 			}
 		}
 
+		h1 {
+			line-height: 1.1em;
+		}
+
 		width: 100%;
-		font-size: 3em;
+		font-size: 4.3vw;
 		position: relative;
 		text-align: center;
 	}
@@ -150,20 +158,13 @@ body {
 	#message {
 		z-index: 2;
 
-		h1 {
-			// background-image: url('../images/camera.png');
-			// background-repeat: no-repeat;
-			// background-position: center top;
-			// @include background-size(300px 300px);
-			// padding-top: 275px;
-		}
-
 		h2 {
 			font-size: 1.1em;
 		}
 	}
 
 	#counter {
+		top: 45%;
 		position: absolute;
 		left: 0;
 		z-index: 4;
@@ -175,14 +176,18 @@ body {
 
 		h1 {
 			padding: 0;
-			padding-top: 25px;
+			padding-top: 1.3vw;
 			@include box-sizing(border-box);
 			overflow: hidden;
 			text-align: center;
-			width: 350px;
-			height: 350px;
+			width: 15vw;
+			height: 15vw;
 			@include border-radius(50%);
 			background-color: $international-orange;
+		}
+
+		h2 {
+			@include text-shadow(0 0 2.5vw rgba(#000, 0.35));
 		}
 	}
 }

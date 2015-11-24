@@ -77,13 +77,13 @@ body {
 /* line 14, ../sass/styles.scss */
 body {
   background-image: url("../images/logo.svg");
-  background-position: bottom 100px right 100px;
+  background-position: bottom 4.5vw right 4.5vw;
   background-repeat: no-repeat;
   background-color: #f27134;
-  -moz-background-size: 350px 350px;
-  -o-background-size: 350px 350px;
-  -webkit-background-size: 350px 350px;
-  background-size: 350px 350px;
+  -moz-background-size: 15vw 15vw;
+  -o-background-size: 15vw 15vw;
+  -webkit-background-size: 15vw 15vw;
+  background-size: 15vw 15vw;
   color: #ffffff;
   font-family: 'Whitney A', 'Whitney B', Helvetica, Arial, sans-serif;
   font-size: 2em;
@@ -141,6 +141,10 @@ body #stream-container h2 {
   padding: 0;
 }
 /* line 80, ../sass/styles.scss */
+body .fill {
+  overflow: hidden;
+}
+/* line 84, ../sass/styles.scss */
 body #snap-container {
   z-index: 3;
   position: absolute;
@@ -150,11 +154,11 @@ body #snap-container {
   -webkit-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 84, ../sass/styles.scss */
+/* line 88, ../sass/styles.scss */
 body #snap-container, body #snap-container img {
   width: 100%;
 }
-/* line 89, ../sass/styles.scss */
+/* line 93, ../sass/styles.scss */
 body #snap-container:before {
   content: "";
   width: 100%;
@@ -168,7 +172,7 @@ body #snap-container:before {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 101, ../sass/styles.scss */
+/* line 105, ../sass/styles.scss */
 .flash body #snap-container:before {
   -moz-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
   -webkit-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -179,7 +183,7 @@ body #snap-container:before {
   -ms-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 109, ../sass/styles.scss */
+/* line 113, ../sass/styles.scss */
 .drop body #snap-container {
   -moz-transition: -moz-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
   -o-transition: -o-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -190,19 +194,19 @@ body #snap-container:before {
   -webkit-transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
   transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
 }
-/* line 118, ../sass/styles.scss */
+/* line 122, ../sass/styles.scss */
 body #stream-container {
   position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
 }
-/* line 124, ../sass/styles.scss */
+/* line 128, ../sass/styles.scss */
 body #stream-container, body #stream-container video {
   width: 100%;
   height: 100%;
 }
-/* line 130, ../sass/styles.scss */
+/* line 134, ../sass/styles.scss */
 body #counter,
 body #message {
   top: 40%;
@@ -211,24 +215,29 @@ body #message {
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
   width: 100%;
-  font-size: 3em;
+  font-size: 4.3vw;
   position: relative;
   text-align: center;
 }
-/* line 135, ../sass/styles.scss */
+/* line 139, ../sass/styles.scss */
 body #counter h1, body #counter h2,
 body #message h1,
 body #message h2 {
   display: inline-block;
   font-weight: 400;
 }
-/* line 139, ../sass/styles.scss */
+/* line 143, ../sass/styles.scss */
 body #counter h1 strong, body #counter h2 strong,
 body #message h1 strong,
 body #message h2 strong {
   font-weight: 600;
 }
-/* line 150, ../sass/styles.scss */
+/* line 148, ../sass/styles.scss */
+body #counter h1,
+body #message h1 {
+  line-height: 1.1em;
+}
+/* line 158, ../sass/styles.scss */
 body #message {
   z-index: 2;
 }
@@ -238,28 +247,33 @@ body #message h2 {
 }
 /* line 166, ../sass/styles.scss */
 body #counter {
+  top: 45%;
   position: absolute;
   left: 0;
   z-index: 4;
 }
-/* line 171, ../sass/styles.scss */
+/* line 172, ../sass/styles.scss */
 body #counter h1, body #counter h2 {
   font-size: 2.5em;
   font-weight: 600;
 }
-/* line 176, ../sass/styles.scss */
+/* line 177, ../sass/styles.scss */
 body #counter h1 {
   padding: 0;
-  padding-top: 25px;
+  padding-top: 1.3vw;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
   text-align: center;
-  width: 350px;
-  height: 350px;
+  width: 15vw;
+  height: 15vw;
   -moz-border-radius: 50%;
   -webkit-border-radius: 50%;
   border-radius: 50%;
   background-color: #f27134;
+}
+/* line 189, ../sass/styles.scss */
+body #counter h2 {
+  text-shadow: 0 0 2.5vw rgba(0, 0, 0, 0.35);
 }
