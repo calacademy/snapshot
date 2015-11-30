@@ -177,8 +177,10 @@ var Snapshot = function () {
 		});
 	}
 
-	this.__construct = function () {
-		$(window).on('resize', _onResize);
+	var _onStart = function (e) {
+		$('body').off('click');
+		$('#message').html('<h1>Initializing camera&hellip;</h1>');
+		$(document).fullScreen(true);
 
 		_cam = new SayCheese('#stream-container', {
 			camResolution: _camDimensions
@@ -188,6 +190,15 @@ var Snapshot = function () {
 		_cam.on('start', _onCamStart);
 		_cam.on('snapshot', _onCamSnapshot);
 		_cam.start();
+
+		return false;
+	}
+
+	this.__construct = function () {
+		$(window).on('resize', _onResize);
+
+		$('body').on('click', _onStart);
+		$('#message').html('<h1>Click to begin</h1>');
 	}
 
 	this.__construct();
