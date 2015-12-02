@@ -12,10 +12,16 @@
         public function __construct () {
             $this->_client = new Services_Twilio(TWILIO_SID, TWILIO_TOKEN);
 
+            include_once('/private/globalVars.php');
+
             $this->_aws = S3Client::factory(array(
                 'profile' => 'default',
                 'version' => '2006-03-01',
-                'region' => 'us-west-1'
+                'region' => 'us-west-1',
+                'credentials' => array(
+                    'key' => $awsCredentials['aws_access_key_id'],
+                    'secret' => $awsCredentials['aws_secret_access_key']
+                )
             ));
         }
 
