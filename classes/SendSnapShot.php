@@ -66,6 +66,33 @@
                 )
             );
         }
+
+        public function deleteMediaForMessage ($messageId) {
+            // @note
+            // full res media
+            // https://api.twilio.com/2010-04-01/Accounts/{TWILIO_SID}/Messages/{MessageSid}/Media/{MediaSid}
+            
+            $message = $this->_client->account->messages->get($messageId);
+
+            if ($message->num_media > 0) {
+                foreach ($message->media as $media) {
+                    try {
+                        $this->_client->account->messages->get($message->sid)->media->delete($media->sid);
+                    } catch (Services_Twilio_RestException $e) {
+                        error_log($e->getMessage());
+                        return false;
+                    }
+                }
+            }
+
+            return true;    
+        }
+
+        public function listMedia () {
+            foreach ($this->_client->account->messages as $message) {
+                // do something
+            }
+        }
     }
 
 ?>
