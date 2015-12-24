@@ -56,15 +56,19 @@
                 $files = array($pic);
             }
 
-            $sms = $this->_client->account->messages->sendMessage(
-                TWILIO_NUMBER,
-                $recipient,
-                $msg,
-                $files,
-                array(
-                    'StatusCallback' => TWILIO_CALLBACK
-                )
-            );
+            try {
+                $sms = $this->_client->account->messages->sendMessage(
+                    TWILIO_NUMBER,
+                    $recipient,
+                    $msg,
+                    $files,
+                    array(
+                        'StatusCallback' => TWILIO_CALLBACK
+                    )
+                );
+            } catch (Services_Twilio_RestException $e) {
+                error_log($e->getMessage());
+            }
         }
 
         public function deleteMediaForMessage ($messageId) {
