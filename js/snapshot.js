@@ -154,6 +154,9 @@ var Snapshot = function () {
 		formData.append('smssid', _smssid);
 		formData.append('snapshot', _dataURItoBlob(snap));
 
+		var store = (parseInt($.getQueryString('store')) == 1) ? '1' : '0';
+		formData.append('store', store);
+
 		$.ajax({
 			url: 'ajax/',
 			type: 'POST',

@@ -9,21 +9,17 @@
     class SendSnapShot {
         private $_client;
         private $_aws;
-        private $_bitlyToken;
 
         public function __construct () {
             $this->_client = new Services_Twilio(TWILIO_SID, TWILIO_TOKEN);
-
-            include_once('/private/globalVars.php');
-            $this->_bitlyToken = $bitlyCredentials['oauth_token'];
 
             $this->_aws = S3Client::factory(array(
                 'profile' => 'default',
                 'version' => '2006-03-01',
                 'region' => 'us-west-1',
                 'credentials' => array(
-                    'key' => $awsCredentials['aws_access_key_id'],
-                    'secret' => $awsCredentials['aws_secret_access_key']
+                    'key' => AWS_ACCESS_KEY_ID,
+                    'secret' => AWS_SECRET_ACCESS_KEY
                 )
             ));
         }
@@ -54,7 +50,7 @@
 
         public function getShortUrl ($longUrl) {
             $params = array();
-            $params['access_token'] = $this->_bitlyToken;
+            $params['access_token'] = BITLY_OAUTH_TOKEN;
             $params['longUrl'] = $longUrl;
             $params['domain'] = 'calacade.my';
             $results = bitly_get('shorten', $params);
@@ -64,31 +60,33 @@
         }
 
         public function getStoreMessage ($pic) {
-            $msg = 'You look amazing.';
+            $msg = DEFAULT_RESPONSE_MSG;
 
             if ($pic !== null) {
                 $url = $this->getShortUrl(STORE_URL . urlencode($pic));
                 
                 if ($url !== false) {
-                    $msg = 'Nice! Purchase custom prints, apparel and more at ' . $url;
+                    $msg = 'Looking good! Purchase custom prints, apparel and more at ' . $url;
                 }
             }
 
             return $msg;
         }
 
-        public function send ($recipient, $pic = null) {
+        public function send ($recipient, $pic = null, $withStoreLink) {
             $files = null;
 
             if ($pic !== null) {
                 $files = array($pic);
             }
 
+            $msg = $withStoreLink ? $this->getStoreMessage($pic) : DEFAULT_RESPONSE_MSG;
+
             try {
                 $sms = $this->_client->account->messages->sendMessage(
                     TWILIO_NUMBER,
                     $recipient,
-                    $this->getStoreMessage($pic),
+                    $msg,
                     $files,
                     array(
                         'StatusCallback' => TWILIO_CALLBACK

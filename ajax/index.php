@@ -17,19 +17,14 @@
 
 	require('../classes/SendSnapShot.php');
 	$foo = new SendSnapShot();
-	
-	$msgs = array(
-		'Damn girl.',
-		'You look beautiful.',
-		'You are braver than you believe.',
-		'You are stronger than you seem.',
-		'You rock.',
-		'Golly!'
-	);
 
+	// upload image capture
 	$arr['recipient'] = trim($_REQUEST['num']);
 	$arr['url'] = $foo->upload($_REQUEST['smssid'] . '.png', $_FILES['snapshot']['tmp_name']);
-	$foo->send($arr['recipient'], $arr['url']);
+	
+	// send image and maybe a store link
+	$store = (intval($_REQUEST['store']) == 1);
+	$foo->send($arr['recipient'], $arr['url'], $store);
 
 	die(json_encode($arr));
 
