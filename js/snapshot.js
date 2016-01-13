@@ -5,6 +5,7 @@ var Snapshot = function () {
 	var _count;
 	var _secs = 6;
 	var _uid_sms;
+	var _smssid;
 	var _currentTime;
 
 	var _camDimensions = {
@@ -120,6 +121,7 @@ var Snapshot = function () {
 			// check if there's a newer request
 			if (uid_sms > _uid_sms) {
 				_uid_sms = uid_sms;
+				_smssid = data[0].smssid;
 				_num = data[0].num_from;
 				_startCountdown();
 			} else {
@@ -149,7 +151,7 @@ var Snapshot = function () {
 		// send image to server for processing and transmission
 		var formData = new FormData();
 		formData.append('num', _num);
-		formData.append('filename', 'test.png');
+		formData.append('smssid', _smssid);
 		formData.append('snapshot', _dataURItoBlob(snap));
 
 		$.ajax({

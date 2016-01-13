@@ -10,7 +10,7 @@
 		'recipient' => false
 	);
 
-	if (!isset($_REQUEST['num']) || !isset($_REQUEST['filename']) || !isset($_FILES['snapshot'])) {
+	if (!isset($_REQUEST['num']) || !isset($_REQUEST['smssid']) || !isset($_FILES['snapshot'])) {
 		$arr['error'] = 'bad request';
 		die(json_encode($arr));
 	}
@@ -28,8 +28,8 @@
 	);
 
 	$arr['recipient'] = trim($_REQUEST['num']);
-	$arr['url'] = $foo->upload($_REQUEST['filename'], $_FILES['snapshot']['tmp_name']);
-	$foo->send($arr['recipient'], $arr['url'], $msgs[array_rand($msgs)]);
+	$arr['url'] = $foo->upload($_REQUEST['smssid'] . '.png', $_FILES['snapshot']['tmp_name']);
+	$foo->send($arr['recipient'], $arr['url']);
 
 	die(json_encode($arr));
 

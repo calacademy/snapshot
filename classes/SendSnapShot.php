@@ -1,6 +1,7 @@
 <?php
 
     require 'Config.php';
+    require 'bitly.php';
     require 'Services/Twilio.php';
     require 'aws/aws-autoloader.php';
     use Aws\S3\S3Client;
@@ -8,11 +9,13 @@
     class SendSnapShot {
         private $_client;
         private $_aws;
+        private $_bitlyToken;
 
         public function __construct () {
             $this->_client = new Services_Twilio(TWILIO_SID, TWILIO_TOKEN);
 
             include_once('/private/globalVars.php');
+            $this->_bitlyToken = $bitlyCredentials['oauth_token'];
 
             $this->_aws = S3Client::factory(array(
                 'profile' => 'default',
@@ -49,7 +52,32 @@
             return $result['ObjectURL'];
         }
 
-        public function send ($recipient, $pic = null, $msg = 'You look amazing.') {
+        public function getShortUrl ($longUrl) {
+            $params = array();
+            $params['access_token'] = $this->_bitlyToken;
+            $params['longUrl'] = $longUrl;
+            $params['domain'] = 'calacade.my';
+            $results = bitly_get('shorten', $params);
+            
+            if ($results['status_code'] != 200) return false;
+            return $results['data']['url'];
+        }
+
+        public function getStoreMessage ($pic) {
+            $msg = 'You look amazing.';
+
+            if ($pic !== null) {
+                $url = $this->getShortUrl(STORE_URL . urlencode($pic));
+                
+                if ($url !== false) {
+                    $msg = 'Nice! Purchase custom prints, apparel and more at ' . $url;
+                }
+            }
+
+            return $msg;
+        }
+
+        public function send ($recipient, $pic = null) {
             $files = null;
 
             if ($pic !== null) {
@@ -60,7 +88,7 @@
                 $sms = $this->_client->account->messages->sendMessage(
                     TWILIO_NUMBER,
                     $recipient,
-                    $msg,
+                    $this->getStoreMessage($pic),
                     $files,
                     array(
                         'StatusCallback' => TWILIO_CALLBACK

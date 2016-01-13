@@ -152,7 +152,7 @@ class SmsCallback {
 		// $time = date('Y-m-d H:i:s', intval($timeString));
 		// $query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > '{$time}' ORDER BY callback ASC LIMIT 1";
 
-		$query = "SELECT uid_sms, num_from, body, callback FROM sms_received ORDER BY uid_sms DESC LIMIT 1";
+		$query = "SELECT uid_sms, smssid, num_from, body, callback FROM sms_received ORDER BY uid_sms DESC LIMIT 1";
 
 		$arr = array();
 
