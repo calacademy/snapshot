@@ -49,11 +49,11 @@
         }
 
         public function getShortUrl ($longUrl) {
-            $params = array();
-            $params['access_token'] = BITLY_OAUTH_TOKEN;
-            $params['longUrl'] = $longUrl;
-            $params['domain'] = 'calacade.my';
-            $results = bitly_get('shorten', $params);
+            $results = bitly_get('shorten', array(
+                'access_token' => BITLY_OAUTH_TOKEN,
+                'domain' => 'calacade.my',
+                'longUrl' => $longUrl
+            ));
             
             if ($results['status_code'] != 200) return false;
             return $results['data']['url'];
