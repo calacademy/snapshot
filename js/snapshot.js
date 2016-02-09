@@ -3,7 +3,7 @@ var Snapshot = function () {
 	var _intervalCountdown;
 	var _num;
 	var _count;
-	var _secs = 6;
+	var _secs;
 	var _uid_sms;
 	var _smssid;
 	var _currentTime;
@@ -56,7 +56,7 @@ var Snapshot = function () {
 		$('#snap-container').empty();
 		$('html').removeClass('drop');
 
-		$('#message').html('<h1>Send a text to<br /><strong>(415) 214-9513</strong></h1>');
+		$('#message').html('<h1>Text <strong id="txt-message">SELFIE</strong> to<br /><strong>(415) 214-9513</strong></h1>');
 		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
@@ -65,7 +65,7 @@ var Snapshot = function () {
 		_count--;
 
 		if (_count == 0) {
-			$('#counter').html('<h2>Smile!</h2>');
+			$('#counter').html('<h2 id="smile">Smile!</h2>');
 		} else if (_count == -1) {
 			clearInterval(_intervalCountdown);
 			_shoot();
@@ -74,7 +74,7 @@ var Snapshot = function () {
 				$('#message').html('<h1><strong>Check your phone!</strong></h1><h2>~30 secs selfie roundtrip</h2>');
 			}
 
-			$('#counter').html('<h1>' + _count + '</h1>');
+			$('#counter').html('<h2 id="directions">Stand on the <strong>X</strong></h2><h1>' + _count + '</h1>');
 		}
 	}
 
@@ -171,8 +171,11 @@ var Snapshot = function () {
 		var binary = atob(dataURI.split(',')[1]);
 		var array = [];
 
-		for (var i = 0; i < binary.length; i++) {
+		var i = 0;
+
+		while (i < binary.length) {
 			array.push(binary.charCodeAt(i));
+			i++;
 		}
 
 		var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -199,7 +202,21 @@ var Snapshot = function () {
 		return false;
 	}
 
+	var _setCountdownSecs = function () {
+		var secs = parseInt($.getQueryString('secs'));
+
+		if (isNaN(secs) || secs < 3) {
+			// default
+			secs = 10;
+		}
+
+		// add a second of padding
+		secs++;
+		_secs = secs;
+	}
+
 	this.__construct = function () {
+		_setCountdownSecs();
 		$(window).on('resize', _onResize);
 
 		$('body').on('click', _onStart);

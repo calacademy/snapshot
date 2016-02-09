@@ -110,26 +110,30 @@ body #message h1 {
   -webkit-animation: fade-in 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
   animation: fade-in 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
 }
-/* line 47, ../sass/styles.scss */
+/* line 44, ../sass/styles.scss */
+body #message h1 #txt-message {
+  font-weight: 500;
+}
+/* line 51, ../sass/styles.scss */
 .count-down body #counter,
 .count-down body #stream-container {
   filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
   opacity: 1;
 }
-/* line 52, ../sass/styles.scss */
+/* line 56, ../sass/styles.scss */
 .count-down body #message {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 59, ../sass/styles.scss */
+/* line 63, ../sass/styles.scss */
 .flash body #stream-container, .drop body #stream-container {
   display: none;
 }
-/* line 65, ../sass/styles.scss */
+/* line 69, ../sass/styles.scss */
 .drop body #counter {
   display: none;
 }
-/* line 74, ../sass/styles.scss */
+/* line 78, ../sass/styles.scss */
 body #counter, body #counter h1, body #counter h2,
 body #message,
 body #message h1,
@@ -140,11 +144,11 @@ body #stream-container h2 {
   margin: 0;
   padding: 0;
 }
-/* line 80, ../sass/styles.scss */
+/* line 84, ../sass/styles.scss */
 body .fill {
   overflow: hidden;
 }
-/* line 84, ../sass/styles.scss */
+/* line 88, ../sass/styles.scss */
 body #snap-container {
   z-index: 3;
   position: absolute;
@@ -154,11 +158,11 @@ body #snap-container {
   -webkit-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 88, ../sass/styles.scss */
+/* line 92, ../sass/styles.scss */
 body #snap-container, body #snap-container img {
   width: 100%;
 }
-/* line 93, ../sass/styles.scss */
+/* line 97, ../sass/styles.scss */
 body #snap-container:before {
   content: "";
   width: 100%;
@@ -172,7 +176,7 @@ body #snap-container:before {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
 }
-/* line 105, ../sass/styles.scss */
+/* line 109, ../sass/styles.scss */
 .flash body #snap-container:before {
   -moz-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
   -webkit-animation: fade-out 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -183,7 +187,7 @@ body #snap-container:before {
   -ms-transform-origin: 100% 100%;
   transform-origin: 100% 100%;
 }
-/* line 113, ../sass/styles.scss */
+/* line 117, ../sass/styles.scss */
 .drop body #snap-container {
   -moz-transition: -moz-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
   -o-transition: -o-transform 1.5s cubic-bezier(0.215, 0.61, 0.355, 1);
@@ -194,70 +198,72 @@ body #snap-container:before {
   -webkit-transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
   transform: rotate(50deg) translateY(100%) translateX(-10%) scale(0.1);
 }
-/* line 122, ../sass/styles.scss */
+/* line 126, ../sass/styles.scss */
 body #stream-container {
   position: absolute;
   z-index: 1;
   top: 0;
   left: 0;
 }
-/* line 128, ../sass/styles.scss */
+/* line 132, ../sass/styles.scss */
 body #stream-container, body #stream-container video {
   width: 100%;
   height: 100%;
 }
-/* line 134, ../sass/styles.scss */
+/* line 138, ../sass/styles.scss */
 body #counter,
 body #message {
-  top: 40%;
-  -moz-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
   width: 100%;
   font-size: 4.3vw;
   position: relative;
   text-align: center;
 }
-/* line 139, ../sass/styles.scss */
+/* line 140, ../sass/styles.scss */
 body #counter h1, body #counter h2,
 body #message h1,
 body #message h2 {
   display: inline-block;
   font-weight: 400;
 }
-/* line 143, ../sass/styles.scss */
+/* line 144, ../sass/styles.scss */
 body #counter h1 strong, body #counter h2 strong,
 body #message h1 strong,
 body #message h2 strong {
   font-weight: 600;
 }
-/* line 148, ../sass/styles.scss */
+/* line 149, ../sass/styles.scss */
 body #counter h1,
 body #message h1 {
   line-height: 1.1em;
 }
-/* line 158, ../sass/styles.scss */
+/* line 159, ../sass/styles.scss */
 body #message {
+  top: 40%;
+  -moz-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
   z-index: 2;
 }
-/* line 161, ../sass/styles.scss */
+/* line 164, ../sass/styles.scss */
 body #message h2 {
   font-size: 1.1em;
 }
-/* line 166, ../sass/styles.scss */
+/* line 169, ../sass/styles.scss */
 body #counter {
-  top: 45%;
   position: absolute;
+  top: 0;
   left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 4;
 }
-/* line 172, ../sass/styles.scss */
+/* line 178, ../sass/styles.scss */
 body #counter h1, body #counter h2 {
   font-size: 2.5em;
   font-weight: 600;
 }
-/* line 177, ../sass/styles.scss */
+/* line 183, ../sass/styles.scss */
 body #counter h1 {
   padding: 0;
   padding-top: 1.3vw;
@@ -272,8 +278,32 @@ body #counter h1 {
   -webkit-border-radius: 50%;
   border-radius: 50%;
   background-color: #f27134;
+  -moz-transform: translateY(100%);
+  -ms-transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+  transform: translateY(100%);
 }
-/* line 189, ../sass/styles.scss */
+/* line 196, ../sass/styles.scss */
 body #counter h2 {
   text-shadow: 0 0 2.5vw rgba(0, 0, 0, 0.35);
+}
+/* line 199, ../sass/styles.scss */
+body #counter h2#smile {
+  -moz-transform: translateY(135%);
+  -ms-transform: translateY(135%);
+  -webkit-transform: translateY(135%);
+  transform: translateY(135%);
+}
+/* line 203, ../sass/styles.scss */
+body #counter h2#directions {
+  position: absolute;
+  left: 0;
+  bottom: 1vw;
+  width: 100%;
+  font-weight: 400;
+  font-size: 2.2em;
+}
+/* line 212, ../sass/styles.scss */
+body #counter h2#directions strong {
+  font-weight: 600;
 }

@@ -33,8 +33,8 @@
 
 <?php
 
-    require '../classes/Config.php';
-    require '../classes/aws/aws-autoloader.php';
+    require '../../classes/Config.php';
+    require '../../classes/aws/aws-autoloader.php';
     use Aws\S3\S3Client;
 
     class SnapS3 {
