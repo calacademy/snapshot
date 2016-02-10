@@ -60,15 +60,23 @@
                 'page_size' => 100
             ));
 
-            echo '<ul>';
+            // order
+            $ordered = array();
 
             foreach ($iterator as $object) {
-                $key = $object['Key'];
-
-                echo '<li>';
-                echo '<img src="https://s3-us-west-1.amazonaws.com/snapshots.calacademy.org/' . $key . '" />';
                 $time = strtotime($object['LastModified']);
-                echo '<div>' . date('m/d/y g:ia', $time) . '</div>';
+                $ordered[$time] = $object;
+            }
+
+            krsort($ordered);
+
+            // render
+            echo '<ul>';
+
+            foreach ($ordered as $key => $object) {
+                echo '<li>';
+                echo '<img src="https://s3-us-west-1.amazonaws.com/snapshots.calacademy.org/' . $object['Key'] . '" />';
+                echo '<div>' . date('m/d/y g:ia', $key) . '</div>';
                 echo '</li>';
             }
 
