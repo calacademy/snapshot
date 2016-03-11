@@ -99,13 +99,17 @@ var Snapshot = function () {
 	var _pollShutter = function () {
 		console.log(_currentTime);
 
+		var pollAgain = function () {
+			setTimeout(_pollShutter, 1500);
+		}
+
 		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
 			nocache: Math.random(),
 			now: _currentTime
 		}, function (data, textStatus, jqXHR) {
 			// nothing
 			if (data.length == 0) {
-				_pollShutter();
+				pollAgain();
 				return;
 			}
 
@@ -114,7 +118,7 @@ var Snapshot = function () {
 			// setup
 			if (!_uid_sms) {
 				_uid_sms = uid_sms;
-				_pollShutter();
+				pollAgain();
 				return;
 			}
 
@@ -125,7 +129,7 @@ var Snapshot = function () {
 				_num = data[0].num_from;
 				_startCountdown();
 			} else {
-				_pollShutter();
+				pollAgain();
 			}
 		});
 	}
