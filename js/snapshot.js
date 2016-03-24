@@ -7,6 +7,7 @@ var Snapshot = function () {
 	var _uid_sms;
 	var _smssid;
 	var _currentTime;
+	var _code;
 
 	var _camDimensions = {
 		width: 1280,
@@ -49,7 +50,7 @@ var Snapshot = function () {
 
 	var _onCamStart = function () {
 		_onResize();
-		_startPolling();
+		_resetCode();
 	}
 
 	var _startPolling = function () {
@@ -100,7 +101,7 @@ var Snapshot = function () {
 		console.log(_currentTime);
 
 		var pollAgain = function () {
-			setTimeout(_pollShutter, 1500);
+			setTimeout(_pollShutter, 1000);
 		}
 
 		$.getJSON('https://legacy.calacademy.org/snapshot/shutter/', {
@@ -127,9 +128,36 @@ var Snapshot = function () {
 				_uid_sms = uid_sms;
 				_smssid = data[0].smssid;
 				_num = data[0].num_from;
-				_startCountdown();
+
+				var body = $.trim(data[0].body).toLowerCase();
+
+				if (body == _code.toLowerCase()) {
+					// code matches, start countdown
+					_startCountdown();
+				} else {
+					// code mismatch, send error txt
+					_sendErrorMsg(_num);
+					pollAgain();
+				}
 			} else {
 				pollAgain();
+			}
+		});
+	}
+
+	var _sendErrorMsg = function (myNum) {
+		console.log('attempting to send error msg to ' + myNum);
+
+		$.ajax({
+			url: 'error/',
+			type: 'POST',
+			data: {
+				num: myNum
+			},
+			success: function (data, textStatus, jqXHR) {
+				if (data.success) {
+					console.log('error msg sent to ' + data.recipient);
+				}
 			}
 		});
 	}
@@ -140,7 +168,21 @@ var Snapshot = function () {
 		$('html').addClass('drop');
 		$('video').get(0).play();
 
-		setTimeout(_startPolling, 5000);
+		setTimeout(_resetCode, 5000);
+	}
+
+	var _resetCode = function () {
+		$.ajax({
+			url: 'code/',
+			type: 'POST',
+			data: {
+				generate: 1
+			},
+			success: function (data, textStatus, jqXHR) {
+				_code = data.code;
+				_startPolling();
+			}
+		});
 	}
 
 	var _onCamSnapshot = function (snapshot) {
