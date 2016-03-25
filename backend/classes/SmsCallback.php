@@ -1,16 +1,18 @@
 <?php
 
-$includePath = '/Library/Webserver/Documents/include/php/';
+$includePath = dirname(__FILE__) . '/../../include/php/';
 require_once($includePath . 'DatabaseUtil.php');
 require_once($includePath . 'StringUtil.php');
-// require_once($includePath . 'Validate.php');
-// require_once($includePath . 'phpmailer/class.phpmailer.php');
+require_once('Sms.php');
 
-class SmsCallback {
+class SmsCallback extends Sms {
 	private $_db;
 
 	public function __construct () {
+		parent::__construct();
+
 		$db = new DatabaseUtil('snapshot');
+		
 		$this->_db = $db->getConnection();
 
 		if (!$this->_db) {
@@ -23,37 +25,8 @@ class SmsCallback {
 		return (strpos($agent, 'twilio') !== false);
 	}
 
-	private function _json ($data) {
-		header('Access-Control-Allow-Origin: *');
-		header('Cache-Control: no-cache, must-revalidate');
-		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-		header('Content-type: application/json');
-
-		// prepend callback function if it looks like a JSONP request
-		$callback = '';
-
-		if (isset($_REQUEST['callback'])
-			&& !empty($_REQUEST['callback'])) {
-				$callback = $_REQUEST['callback'];
-		}
-
-		if (isset($_REQUEST['jsoncallback'])
-			&& !empty($_REQUEST['jsoncallback'])) {
-				$callback = $_REQUEST['jsoncallback'];
-		}
-
-		// do the encoding
-		$data = json_encode($data);
-
-		if (empty($callback)) {
-			die($data);
-		}
-
-		die($callback . '(' . $data . ');');
-	}
-
 	private function _error ($str = 'unknown error') {
-		$this->_json(array(
+		$this->json(array(
 			'error' => $str
 		));
 	}
@@ -143,7 +116,7 @@ class SmsCallback {
 			$arr[] = $row;
 		}
 
-		$this->_json($arr);
+		$this->json($arr);
 	}
 
 	public function getShutterRequests ($timeString) {
@@ -162,7 +135,7 @@ class SmsCallback {
 			$arr[] = $row;
 		}
 
-		$this->_json($arr);
+		$this->json($arr);
 	}
 }
 

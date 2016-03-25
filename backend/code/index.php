@@ -1,8 +1,7 @@
 <?php
 	
-	header('Cache-Control: no-cache, must-revalidate');
-	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	header('Content-type: application/json');
+	require_once('../classes/Sms.php');
+    $foo = new Sms();
 
 	$file = 'code.txt';
 
@@ -12,8 +11,8 @@
 		}
 	}
 
-	die(json_encode(array(
+	$foo->json(array(
 		'code' => trim(file_get_contents($file))
-	)));
+	));
 
 ?>

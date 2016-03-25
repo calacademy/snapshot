@@ -50,7 +50,7 @@ var Snapshot = function () {
 
 	var _onCamStart = function () {
 		_onResize();
-		_resetCode();
+		_resetCode(_startPolling);
 	}
 
 	var _startPolling = function () {
@@ -98,8 +98,6 @@ var Snapshot = function () {
 	}
 
 	var _pollShutter = function () {
-		console.log(_currentTime);
-
 		var pollAgain = function () {
 			setTimeout(_pollShutter, 1000);
 		}
@@ -132,32 +130,15 @@ var Snapshot = function () {
 				var body = $.trim(data[0].body).toLowerCase();
 
 				if (body == _code.toLowerCase()) {
-					// code matches, start countdown
+					// code matches
+					_resetCode();
 					_startCountdown();
 				} else {
-					// code mismatch, send error txt
-					_sendErrorMsg(_num);
+					// code mismatch
 					pollAgain();
 				}
 			} else {
 				pollAgain();
-			}
-		});
-	}
-
-	var _sendErrorMsg = function (myNum) {
-		console.log('attempting to send error msg to ' + myNum);
-
-		$.ajax({
-			url: 'error/',
-			type: 'POST',
-			data: {
-				num: myNum
-			},
-			success: function (data, textStatus, jqXHR) {
-				if (data.success) {
-					console.log('error msg sent to ' + data.recipient);
-				}
 			}
 		});
 	}
@@ -168,19 +149,18 @@ var Snapshot = function () {
 		$('html').addClass('drop');
 		$('video').get(0).play();
 
-		setTimeout(_resetCode, 5000);
+		setTimeout(_startPolling, 5000);
 	}
 
-	var _resetCode = function () {
-		$.ajax({
-			url: 'code/',
-			type: 'POST',
-			data: {
-				generate: 1
-			},
-			success: function (data, textStatus, jqXHR) {
-				_code = data.code;
-				_startPolling();
+	var _resetCode = function (callback) {
+		$.getJSON('https://legacy.calacademy.org/snapshot/code/', {
+			generate: 1
+		}, function (data, textStatus, jqXHR) {
+			_code = data.code;
+			console.log('code: ' + _code);
+			
+			if (typeof(callback) == 'function') {
+				callback();
 			}
 		});
 	}
