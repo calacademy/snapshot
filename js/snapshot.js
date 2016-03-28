@@ -8,6 +8,7 @@ var Snapshot = function () {
 	var _smssid;
 	var _currentTime;
 	var _code;
+	var _codeBypass = 'bypass';
 
 	var _camDimensions = {
 		width: 1280,
@@ -128,8 +129,9 @@ var Snapshot = function () {
 				_num = data[0].num_from;
 
 				var body = $.trim(data[0].body).toLowerCase();
+				var c = _code.toLowerCase();
 
-				if (body == _code.toLowerCase()) {
+				if (body == c || c == _codeBypass) {
 					// code matches
 					_resetCode();
 					_startCountdown();
@@ -153,8 +155,17 @@ var Snapshot = function () {
 	}
 
 	var _resetCode = function (callback) {
+		var newCode;
+
+		if (parseInt($.getQueryString('bypass')) == 1) {
+			// bypass
+			newCode = _codeBypass;
+		} else {
+			newCode = Math.round(Math.random() * 1000);	
+		}
+
 		$.getJSON('https://legacy.calacademy.org/snapshot/code/', {
-			generate: 1
+			c: newCode
 		}, function (data, textStatus, jqXHR) {
 			_code = data.code;
 			console.log('code: ' + _code);

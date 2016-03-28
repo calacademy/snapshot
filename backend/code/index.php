@@ -5,9 +5,9 @@
 
 	$file = 'code.txt';
 
-	if (isset($_REQUEST['generate'])) {
-		if (intval($_REQUEST['generate'])) {
-			file_put_contents($file, rand());
+	if (isset($_REQUEST['c'])) {
+		if (!empty($_REQUEST['c'])) {
+			file_put_contents($file, trim($_REQUEST['c']));
 		}
 	}
 
