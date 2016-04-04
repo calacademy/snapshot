@@ -58,7 +58,7 @@ var Snapshot = function () {
 		$('#snap-container').empty();
 		$('html').removeClass('drop');
 
-		$('#message').html('<h1>Text <strong id="txt-message">SELFIE</strong> to<br /><strong>(415) 214-9513</strong></h1>');
+		$('#message').html('<h1>Text <strong id="txt-message">' + _code + '</strong> to<br /><strong>(415) 214-9513</strong></h1>');
 		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
@@ -161,7 +161,8 @@ var Snapshot = function () {
 			// bypass
 			newCode = _codeBypass;
 		} else {
-			newCode = Math.round(Math.random() * 1000);	
+			// generate a random code
+			newCode = Math.round(Math.random() * 999);	
 		}
 
 		$.getJSON('https://legacy.calacademy.org/snapshot/code/', {
@@ -222,23 +223,6 @@ var Snapshot = function () {
 		});
 	}
 
-	var _onStart = function (e) {
-		$('body').off('click');
-		$('#message').html('<h1>Initializing camera&hellip;</h1>');
-		$(document).fullScreen(true);
-
-		_cam = new SayCheese('#stream-container', {
-			camResolution: _camDimensions
-		});
-
-		_cam.on('error', _onCamError);
-		_cam.on('start', _onCamStart);
-		_cam.on('snapshot', _onCamSnapshot);
-		_cam.start();
-
-		return false;
-	}
-
 	var _setCountdownSecs = function () {
 		var secs = parseInt($.getQueryString('secs'));
 
@@ -256,8 +240,16 @@ var Snapshot = function () {
 		_setCountdownSecs();
 		$(window).on('resize', _onResize);
 
-		$('body').on('click', _onStart);
-		$('#message').html('<h1>Click to begin</h1>');
+		$('#message').html('<h1>Initializing camera&hellip;</h1>');
+
+		_cam = new SayCheese('#stream-container', {
+			camResolution: _camDimensions
+		});
+
+		_cam.on('error', _onCamError);
+		_cam.on('start', _onCamStart);
+		_cam.on('snapshot', _onCamSnapshot);
+		_cam.start();
 	}
 
 	this.__construct();
