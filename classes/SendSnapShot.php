@@ -59,8 +59,19 @@
             return $results['data']['url'];
         }
 
+        public function getResponseMsg () {
+            $items = array(
+                'Woot—science never looked so good! xo, @calacademy',
+                'Nice choppers! Giraffes sure are jelly. xo, @calacademy',
+                'Whoa—you blinded us with science. xo, @calacademy',
+                'We brought the science, you brought the party. Go team! xo, @calacademy'
+            );
+
+            return $items[array_rand($items)];
+        }
+
         public function getStoreMessage ($pic) {
-            $msg = DEFAULT_RESPONSE_MSG;
+            $msg = $this->getResponseMsg();
 
             if ($pic !== null) {
                 $url = $this->getShortUrl(STORE_URL . urlencode($pic));
@@ -80,7 +91,7 @@
                 $files = array($pic);
             }
 
-            $msg = $withStoreLink ? $this->getStoreMessage($pic) : DEFAULT_RESPONSE_MSG;
+            $msg = $withStoreLink ? $this->getStoreMessage($pic) : $this->getResponseMsg();
 
             try {
                 $sms = $this->_client->account->messages->sendMessage(
