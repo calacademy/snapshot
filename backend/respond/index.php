@@ -1,5 +1,5 @@
 <?php
-    
+
     // This code is executed by Twilio.
     // URL is configured in our Twilio account per phone number. 
 
@@ -10,11 +10,23 @@
     $foo->received($_REQUEST);
 
     $message = '<Message>' . WRONG_CODE_MSG . '</Message>';
-    $code = file_get_contents('../code/code.txt');
+    
+    parse_str(file_get_contents('../code/code.txt'));
+    $is_numeric = ($is_numeric === 'true') ? true : false;
 
-    if ($code !== false) {
+    if (isset($code)) {
     	if (!empty($code) && isset($_REQUEST['Body'])) {
-    		if (strtolower(trim($code)) == strtolower(trim($_REQUEST['Body']))) {
+            $body = strtolower(trim($_REQUEST['Body']));
+
+            if ($is_numeric) {
+                // strip everything except integers
+                $body = preg_replace('/[^0-9]/', '', $body);
+            } else {
+                // strip everything except letters
+                $body = preg_replace('/[^a-z]/', '', $body);
+            }
+
+    		if (strtolower(trim($code)) == $body) {
     			// correct code, don't send a response
                 $message = '';
     		}
@@ -22,8 +34,10 @@
     }
 
     // bypass
-    if ($code == 'bypass') {
-        $message = '';
+    if (isset($code)) {
+        if ($code == 'bypass') {
+            $message = '';
+        }
     }
 
     header("content-type: text/xml");

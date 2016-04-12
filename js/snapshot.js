@@ -9,6 +9,20 @@ var Snapshot = function () {
 	var _currentTime;
 	var _code;
 	var _codeBypass = 'bypass';
+	var _isNumeric;
+
+	var _words = [
+		'penguin',
+		'roof',
+		'shark',
+		'explore',
+		'explain',
+		'protect',
+		'tree',
+		'fish',
+		'claude',
+		'bird'
+	];
 
 	var _camDimensions = {
 		width: 1280,
@@ -58,7 +72,7 @@ var Snapshot = function () {
 		$('#snap-container').empty();
 		$('html').removeClass('drop');
 
-		$('#message').html('<h1>Text <strong id="txt-message">' + _code + '</strong> to<br /><strong>(415) 214-9513</strong></h1>');
+		$('#message').html('<h1>Text <strong id="txt-message">' + _code.toUpperCase() + '</strong> to<br /><strong>(415) 214-9513</strong></h1>');
 		_currentTime = Math.floor(Date.now() / 1000);
 		_pollShutter();
 	}
@@ -128,7 +142,7 @@ var Snapshot = function () {
 				_smssid = data[0].smssid;
 				_num = data[0].num_from;
 
-				var body = $.trim(data[0].body).toLowerCase();
+				var body = _getSanitizedCode(data[0].body);
 				var c = _code.toLowerCase();
 
 				if (body == c || c == _codeBypass) {
@@ -145,6 +159,16 @@ var Snapshot = function () {
 		});
 	}
 
+	var _getSanitizedCode = function (input) {
+		input = $.trim(input).toLowerCase();
+
+		// strip everything except digits
+		if (_isNumeric) return input.replace(/\D/g, '');
+
+		// strip everything except letters
+		return input.replace(/[^a-z]/g, '');
+	}
+
 	var _onSnapshotSent = function (data, status, xhr) {
 		$('html').removeClass('count-down');
 		$('html').removeClass('flash');
@@ -154,22 +178,24 @@ var Snapshot = function () {
 		setTimeout(_startPolling, 5000);
 	}
 
-	var _resetCode = function (callback) {
-		var newCode;
-
+	var _getCode = function () {
 		if (parseInt($.getQueryString('bypass')) == 1) {
-			// bypass
-			newCode = _codeBypass;
-		} else {
-			// generate a random code
-			newCode = Math.round(Math.random() * 999);	
+			return _codeBypass;
 		}
 
+		if (_isNumeric) {
+			return Math.round(Math.random() * 999);	
+		}
+
+		return _words[Math.floor(Math.random() * _words.length)];
+	}
+
+	var _resetCode = function (callback) {
 		$.getJSON('https://legacy.calacademy.org/snapshot/code/', {
-			c: newCode
+			c: _getCode(),
+			is_numeric: _isNumeric
 		}, function (data, textStatus, jqXHR) {
 			_code = data.code;
-			console.log('code: ' + _code);
 			
 			if (typeof(callback) == 'function') {
 				callback();
@@ -237,6 +263,7 @@ var Snapshot = function () {
 	}
 
 	this.__construct = function () {
+		_isNumeric = (parseInt($.getQueryString('bypass')) != 1) && (parseInt($.getQueryString('words')) != 1);
 		_setCountdownSecs();
 		$(window).on('resize', _onResize);
 
