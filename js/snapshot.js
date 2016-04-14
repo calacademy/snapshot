@@ -12,16 +12,11 @@ var Snapshot = function () {
 	var _isNumeric;
 
 	var _words = [
-		'penguin',
-		'roof',
-		'shark',
-		'explore',
-		'explain',
-		'protect',
+		'leaf',
 		'tree',
-		'fish',
-		'claude',
-		'bird'
+		'hoof',
+		'spots',
+		'herd'
 	];
 
 	var _camDimensions = {
