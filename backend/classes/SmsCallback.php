@@ -129,7 +129,10 @@ class SmsCallback extends Sms {
 			)";
 
 		if ($this->_getDBResource($query)) {
-			return $triggerShutter;
+			return array(
+				'locked' => $locked,
+				'correct_code' => $isValidCode
+			);
 		} else {
 			return false;
 		}
