@@ -1,7 +1,11 @@
 <?php
 	
-	require_once('../classes/Sms.php');
-    $foo = new Sms();
+	require_once('../classes/SmsCallback.php');
+    $foo = new SmsCallback();
+
+    if (isset($_REQUEST['num'])) {
+    	$foo->unlock($_REQUEST['num']);	
+    }
 
 	$file = 'code.txt';
 

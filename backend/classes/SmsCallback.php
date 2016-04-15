@@ -20,6 +20,56 @@ class SmsCallback extends Sms {
 		}
 	}
 
+	public function isValidCode ($myCode) {
+		parse_str(file_get_contents('../code/code.txt'));
+	    $is_numeric = ($is_numeric === 'true') ? true : false;
+
+	    if (isset($code)) {
+	    	// bypass
+	    	if ($code == 'bypass') return true;
+
+	    	if (!empty($code) && isset($myCode)) {
+	            $body = strtolower(trim($myCode));
+
+	            if ($is_numeric) {
+	                // strip everything except integers
+	                $body = preg_replace('/[^0-9]/', '', $body);
+	            } else {
+	                // strip everything except letters
+	                $body = preg_replace('/[^a-z]/', '', $body);
+	            }
+
+	    		if (strtolower(trim($code)) == $body) {
+	    			// correct code, don't send a response
+	                return true;
+	    		}
+	    	}
+	    }
+
+	    return false;
+	} 
+
+	public function isLocked ($num) {
+		$num = mysql_real_escape_string($num);
+		$query = "SELECT locked FROM cams WHERE num = '$num'";
+
+		$result = $this->_getDBResource($query);
+		$row = mysql_fetch_assoc($result);
+
+		return $row['locked'];
+	}
+
+	public function unlock ($num) {
+		$num = mysql_real_escape_string($num);
+		$query = "UPDATE cams SET locked = 0 WHERE num = '$num'";
+
+		if ($this->_getDBResource($query)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public function isFromTwilio () {
 		$agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 		return (strpos($agent, 'twilio') !== false);
@@ -44,15 +94,25 @@ class SmsCallback extends Sms {
 
 	public function received ($data) {
 		if (!$this->isFromTwilio()) {
-			$this->_error();
+			$this->_error('blocked recipient');
 			return false;
 		}
 
 		$data = StringUtil::getCleanArray($data);
+		$locked = $this->isLocked($data['To']);
+		$isValidCode = $this->isValidCode($data['Body']);
+		$triggerShutter = !$locked && $isValidCode;
+		$triggerShutterString = $triggerShutter ? '0' : '1';
+
+		if ($triggerShutter) {
+			$query = "UPDATE cams SET locked = 1 WHERE num = '{$data['To']}'";
+			$this->_getDBResource($query);
+		}
 
 		$query = "INSERT INTO sms_received
 			(
 				smssid,
+				locked,
 				num_to,
 				num_from,
 				body,
@@ -61,6 +121,7 @@ class SmsCallback extends Sms {
 			VALUES
 			(
 				'{$data['SmsSid']}',
+				{$triggerShutterString},
 				'{$data['To']}',
 				'{$data['From']}',
 				'{$data['Body']}',
@@ -68,7 +129,7 @@ class SmsCallback extends Sms {
 			)";
 
 		if ($this->_getDBResource($query)) {
-			return true;
+			return $triggerShutter;
 		} else {
 			return false;
 		}
@@ -120,13 +181,7 @@ class SmsCallback extends Sms {
 	}
 
 	public function getShutterRequests ($timeString) {
-		// $query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > DATE_SUB(NOW(), INTERVAL 1 MINUTE) LIMIT 25";
-		
-		// $time = date('Y-m-d H:i:s', intval($timeString));
-		// $query = "SELECT smssid, num_from, body FROM sms_received WHERE callback > '{$time}' ORDER BY callback ASC LIMIT 1";
-
-		$query = "SELECT uid_sms, smssid, num_from, body, callback FROM sms_received ORDER BY uid_sms DESC LIMIT 1";
-
+		$query = "SELECT uid_sms, smssid, num_from, body, callback FROM sms_received WHERE locked = 0 ORDER BY uid_sms DESC LIMIT 1";
 		$arr = array();
 
 		$result = $this->_getDBResource($query);

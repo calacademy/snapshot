@@ -1,4 +1,4 @@
-var Snapshot = function () {
+var Snapshot = function (twilioNumber) {
 	var _cam;
 	var _intervalCountdown;
 	var _num;
@@ -188,6 +188,7 @@ var Snapshot = function () {
 	var _resetCode = function (callback) {
 		$.getJSON('https://legacy.calacademy.org/snapshot/code/', {
 			c: _getCode(),
+			num: twilioNumber,
 			is_numeric: _isNumeric
 		}, function (data, textStatus, jqXHR) {
 			_code = data.code;

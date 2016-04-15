@@ -11,9 +11,13 @@
     	<script src="js/snapshot.js"></script>
     	
     	<script>
+
+    		<?php require_once('classes/Config.php'); ?>
+
     		$(document).ready(function () {
-    			var foo = new Snapshot();
+    			var foo = new Snapshot('<?php echo TWILIO_NUMBER; ?>');
     		});
+    		
     	</script>
 
 	</head>
