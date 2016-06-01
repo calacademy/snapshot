@@ -61,10 +61,9 @@
 
         public function getResponseMsg () {
             $items = array(
-                'Woot—science never looked so good! xo, @calacademy #CASBigBang',
-                'Nice choppers! Giraffes sure are jelly. xo, @calacademy #CASBigBang',
-                'Whoa—you blinded us with science. xo, @calacademy #CASBigBang',
-                'We brought the science, you brought the party. Go team! xo, @calacademy #CASBigBang'
+                'Woot—science never looked so good! xo, @calacademy. (Share wide & far with #CASNightLife)',
+                'Nice choppers! Giraffes sure are jelly. xo, @calacademy (Share wide & far with #CASNightLife)',
+                'Whoa—you blinded us with science. xo, @calacademy (Share wide & far with #CASNightLife)'
             );
 
             return $items[array_rand($items)];
